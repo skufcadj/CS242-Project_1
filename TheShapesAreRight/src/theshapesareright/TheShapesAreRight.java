@@ -19,6 +19,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -52,6 +54,11 @@ public class TheShapesAreRight extends Application {
         
         Image robImg = new Image("RobFace.png");
         
+        Rectangle robBacking = new Rectangle(600,120);
+        robBacking.setFill(Color.GOLD);
+        robBacking.setStroke(Color.BLACK);
+        robBacking.relocate(100,90);
+        paneOne.getChildren().add(robBacking);
         
         ImageView robFaceOne = new ImageView(robImg);
         paneOne.getChildren().add(robFaceOne);
@@ -79,6 +86,7 @@ public class TheShapesAreRight extends Application {
         Text robSpeech = new Text("Hi, I'm Rob Schneider, and this is 'The Shapes are Right!'\nPlease select the number of shapes you want to play with \nby dragging the slider.\nThe Rob Slider.");
         paneOne.getChildren().add(robSpeech);
         robSpeech.relocate(200, 100);
+        robSpeech.setStyle("-fx-font: 20 Impact;");
         
         Text shapeNum = new Text("3 Shapes");
         paneOne.getChildren().add(shapeNum);
@@ -115,6 +123,7 @@ public class TheShapesAreRight extends Application {
         scnTwoBtn.setOnAction(new EventHandler<ActionEvent>() { //We start the game!
             @Override
             public void handle(ActionEvent event){
+                paneTwo.getChildren().add(robBacking);
                 primaryStage.setScene(sceneTwo);
                 paneTwo.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene two!
                 paneTwo.getChildren().add(robSpeech);
@@ -129,11 +138,12 @@ public class TheShapesAreRight extends Application {
         scnThreeBtn.relocate(400,400);
         paneTwo.getChildren().add(scnThreeBtn);
         scnThreeBtn.setText("Next");
-        scnThreeBtn.setOnAction(new EventHandler<ActionEvent>() { //We start the game!
+        scnThreeBtn.setOnAction(new EventHandler<ActionEvent>() { //Go the scene three
             @Override
             public void handle(ActionEvent event){
+                paneThree.getChildren().add(robBacking);
                 primaryStage.setScene(sceneThree);
-                paneThree.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene two!
+                paneThree.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene three!
                 paneThree.getChildren().add(robSpeech);
                 robSpeech.setText("You have SHAPES GO HERE.\nPLease Click and Drag to guess their order!");
             }
@@ -150,7 +160,7 @@ public class TheShapesAreRight extends Application {
         paneThree.getChildren().add(guessBtn);
         guessBtn.relocate(600,400);
         guessBtn.setText("Guess this Order");
-        scnThreeBtn.setOnAction(new EventHandler<ActionEvent>() { //We start the game!
+        guessBtn.setOnAction(new EventHandler<ActionEvent>() { //Guess an inputted order
             @Override
             public void handle(ActionEvent event){
                 if(round<3){ //Rounds one and two
@@ -159,9 +169,10 @@ public class TheShapesAreRight extends Application {
                     //Reset Thnags and play again. DO IT HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }else{ //round three
                     //The last round has finished. That's bretty nifty.
+                    paneFour.getChildren().add(robBacking);
                     primaryStage.setScene(sceneFour);
-                    paneThree.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene two!
-                    paneThree.getChildren().add(robSpeech);
+                    paneFour.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene four!
+                    paneFour.getChildren().add(robSpeech);
                     robSpeech.setText("You scored SCORE SCORE and SCORE on rounds One, Two, and Three.\nThe highest Score among these was SCORE, which is your final score!\nPlay again?");
 
                 }
@@ -172,6 +183,21 @@ public class TheShapesAreRight extends Application {
         //---------------------------------------------------------------------------------------
         //Scene Four Stuff:
         Button resetBtn = new Button("RESET");
+        paneFour.getChildren().add(resetBtn);
+        resetBtn.relocate(400,500);
+        resetBtn.setOnAction(new EventHandler<ActionEvent>() { //We restart the game!
+            @Override
+            public void handle(ActionEvent event){
+                paneOne.getChildren().add(robBacking);
+                primaryStage.setScene(sceneOne);
+                round = 1;
+                roundTxt.setText("Round: "+round);
+                paneOne.getChildren().add(robFaceOne); //Move the animated face and speech bubble back to scene one!
+                paneOne.getChildren().add(robSpeech);
+                robSpeech.setText("Hi, I'm Rob Schneider, and this is 'The Shapes are Right!'\nPlease select the number of shapes you want to play with \nby dragging the slider.\nThe Rob Slider.");
+            }
+        });
+        
         
         
         
