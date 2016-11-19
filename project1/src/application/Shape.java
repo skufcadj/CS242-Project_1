@@ -37,6 +37,15 @@ public class Shape {
 	public String getColor() {
 		return this.color;
 	}
+	
+	/**
+	 * getNamePNG() - returns a filename for a respective png of the shape
+	 * 
+	 * @return this.color + "_" + this.type + ".png"
+	 */
+	public String getNamePNG() {
+		return this.color + "_" + this.type + ".png";	// i.e. red_circle.png
+	}
 	/**
 	 * toString() - returns a description of shape in format "color type" (i.e. "red circle")
 	 * 
