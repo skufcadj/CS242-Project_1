@@ -1,26 +1,34 @@
 package application;
 	
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import java.util.*;
 
-
-public class Main extends Application {
-	@Override
-	public void start(Stage primaryStage) {
-		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
+public class Main {
+	public static void main (String[] args ) {
+		LinkedList<String> shapes = new LinkedList<String>();
+		String str1 = new String("square");
+		String str2 = new String("circle");
+		String str3 = new String("triangle");
+		String str4 = new String("diamond");
+		shapes.add( str1 );
+		shapes.add( str2 );
+		shapes.add( str3 );
+		shapes.add( str4 );
+		
+		LinkedList<String> colors = new LinkedList<String>();
+		str1 = "red";
+		str2 = "blue";
+		str3 = "yellow";
+		str4 = "green";
+		colors.add( str1 );
+		colors.add( str2 );
+		colors.add( str3 );
+		colors.add( str4 );
+		
+		int n = 10;
+		
+		ShapeList list = new ShapeList(n, shapes, colors);
+		System.out.println(list.toString());
+		
+		
 	}
 }
