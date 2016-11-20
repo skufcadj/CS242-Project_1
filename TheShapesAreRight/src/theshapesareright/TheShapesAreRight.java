@@ -5,15 +5,20 @@
  */
 package theshapesareright;
 
+import java.util.*;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,18 +30,40 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
+
+
+
 /**
  *
  * @author Yoel
  */
 public class TheShapesAreRight extends Application {
     
-    //Top level varialbes:
+    //Top level variables:
     int round = 1;
+    List<String> shapes = new ArrayList<String>(); //The list of possible shapes
+    List<String> colors = new ArrayList<String>(); //The list of possible shapes
+    List<Shape> orderedList;
+    List<Shape> randomList;
+    ShapeList shapeList;
     
     @Override
     public void start(Stage primaryStage) {
         //Setup:
+        shapes.add("Square");
+        shapes.add("Triangle");
+        shapes.add("Diamond");
+        shapes.add("Circle");
+        
+        colors.add("Red");
+        colors.add("Blue");
+        colors.add("Green");
+        colors.add("Yellow");
+
+        
+        ObservableList<String> shapesObs = FXCollections.observableList(shapes);
+        ObservableList<String> colorsObs = FXCollections.observableList(colors);
         
         Pane paneOne = new Pane();
         Pane paneTwo = new Pane();
@@ -53,6 +80,7 @@ public class TheShapesAreRight extends Application {
         //Scene One Stuff:
         
         Image robImg = new Image("RobFace.png");
+        
         
         Rectangle robBacking = new Rectangle(600,120);
         robBacking.setFill(Color.GOLD);
@@ -134,6 +162,23 @@ public class TheShapesAreRight extends Application {
         
         //---------------------------------------------------------------------------------------
         //Scene Two Stuff:
+        ListView<String> shapesView = new ListView<String>();
+        shapesView.setItems(shapesObs);
+        shapesView.setMinWidth(100);
+        shapesView.setPrefHeight(120);
+        paneTwo.getChildren().add(shapesView);
+        shapesView.relocate(100,300);
+        shapesView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        ListView<String> colorsView = new ListView<String>();
+        colorsView.setItems(colorsObs);
+        colorsView.setMinWidth(100);
+        colorsView.setPrefHeight(120);
+        paneTwo.getChildren().add(colorsView);
+        colorsView.relocate(500,300);
+        colorsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+
         Button scnThreeBtn = new Button();
         scnThreeBtn.relocate(400,400);
         paneTwo.getChildren().add(scnThreeBtn);
@@ -141,17 +186,20 @@ public class TheShapesAreRight extends Application {
         scnThreeBtn.setOnAction(new EventHandler<ActionEvent>() { //Go the scene three
             @Override
             public void handle(ActionEvent event){
+                shapeList = new ShapeList((int)robSlider.getValue(), shapesView.getSelectionModel().getSelectedItems(), colorsView.getSelectionModel().getSelectedItems());
+                orderedList = shapeList.getPermutation();
+                randomList = shapeList.getCombination();
                 paneThree.getChildren().add(robBacking);
                 primaryStage.setScene(sceneThree);
                 paneThree.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene three!
                 paneThree.getChildren().add(robSpeech);
-                robSpeech.setText("You have SHAPES GO HERE.\nPLease Click and Drag to guess their order!");
+                robSpeech.setText("Your shapes are shown in the left coumn.\nPLease Click and Drag to guess their order!\nWhen you're done, click the 'GUESS' button.");
             }
         });
         //---------------------------------------------------------------------------------------
         //Scene Three Stuff:
         
-        //Mostly TBI
+        
         Text roundTxt = new Text("Round: "+round);
         paneThree.getChildren().add(roundTxt);
         roundTxt.relocate(600, 10);
