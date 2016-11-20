@@ -47,10 +47,12 @@ public class TheShapesAreRight extends Application {
     List<Shape> orderedList;
     List<Shape> randomList;
     ShapeList shapeList;
+    List<Shape> userGuessList = new LinkedList<Shape>();
+    List<Shape> sortedShapes;
     
     @Override
     public void start(Stage primaryStage) {
-        //Setup:
+        //Setup, top level stuff, and things that need to be declared before anything else:
         shapes.add("Square");
         shapes.add("Triangle");
         shapes.add("Diamond");
@@ -75,6 +77,8 @@ public class TheShapesAreRight extends Application {
         Scene sceneThree = new Scene(paneThree, 800, 600);
         Scene sceneFour = new Scene(paneFour, 800, 600);
         
+        ListView<Shape> inputListView = new ListView<Shape>(); //We declare this up here because it's going to be accessed by scene 2 items.
+        paneThree.getChildren().add(inputListView);
         
         //-------------------------------------------------------------------------------------
         //Scene One Stuff:
@@ -193,12 +197,35 @@ public class TheShapesAreRight extends Application {
                 primaryStage.setScene(sceneThree);
                 paneThree.getChildren().add(robFaceOne); //Move the animated face and speech bubble to scene three!
                 paneThree.getChildren().add(robSpeech);
-                robSpeech.setText("Your shapes are shown in the left coumn.\nPLease Click and Drag to guess their order!\nWhen you're done, click the 'GUESS' button.");
+                robSpeech.setText("Your shapes are shown in the left coumn.\nPLease Click items in order to build your 'guess' list!\nWhen you're done, click the 'GUESS' button.");
+                sortedShapes = shapeList.getPermutation();
+                inputListView.setItems(FXCollections.observableArrayList(sortedShapes));
             }
         });
         //---------------------------------------------------------------------------------------
         //Scene Three Stuff:
+        Text userGuessText = new Text();
+        paneThree.getChildren().add(userGuessText);
+        userGuessText.relocate(350,220);
         
+        inputListView.setMinWidth(100);
+        inputListView.setPrefHeight(330);
+        inputListView.relocate(100,250);
+        inputListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        //inputListView.setEditable(true);
+        inputListView.getSelectionModel().selectedItemProperty().addListener(
+                new ChangeListener<Shape>(){
+                    public void changed(ObservableValue<? extends Shape> observableValue, Shape oldValue, Shape newValue){
+                        userGuessList.add(newValue); //NOT THE PROBLEM
+                        System.out.println(newValue.toString()); //debug line NOT THE PROBLEM
+                        userGuessText.setText(userGuessText.getText()+"\n"+newValue.toString()); //add to textfield on right NOT THE PROBLEM
+                        //inputListView.getItems().remove(inputListView.getSelectionModel().getSelectedItem()); //Is this recursive?
+                        System.out.println(inputListView.getItems().size());
+                        //inputListView.getSelectionModel().clearSelection();
+                        sortedShapes.remove(newValue);
+                        inputListView.setItems(FXCollections.observableArrayList(sortedShapes));
+                    }
+        });
         
         Text roundTxt = new Text("Round: "+round);
         paneThree.getChildren().add(roundTxt);
@@ -236,6 +263,7 @@ public class TheShapesAreRight extends Application {
         resetBtn.setOnAction(new EventHandler<ActionEvent>() { //We restart the game!
             @Override
             public void handle(ActionEvent event){
+                userGuessList.clear();
                 paneOne.getChildren().add(robBacking);
                 primaryStage.setScene(sceneOne);
                 round = 1;

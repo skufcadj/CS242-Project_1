@@ -33,9 +33,9 @@ public class ShapeList {
 			String newColor = colors.get( randomColorIndex );
                         
                         //String newType = types.get( 2 );
-                        System.out.println(newType);
+                        //System.out.println(newType);
 			//String newColor = colors.get( 2 );
-                        System.out.println(newColor);
+                        //System.out.println(newColor);
 
 			
 			orderedList.add( new Shape( newType, newColor ) );
